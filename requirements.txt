@@ -7,3 +7,4 @@ uvicorn
 fastapi
 tensorflow
 psutil
+gc
