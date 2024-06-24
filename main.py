@@ -404,7 +404,7 @@ def release_resources():
         torch.cuda.empty_cache()
         gc.collect()
     except Exception as e:
-        true
+        pass
 
 def resource_manager():
     MAX_RAM_PERCENT = 1
@@ -435,7 +435,7 @@ def resource_manager():
             time.sleep(0)  # Check every 5 seconds
 
         except Exception as e:
-            true
+            pass
 
 # Iniciar el manejador de recursos en un hilo separado
 resource_manager_thread = Thread(target=resource_manager)
