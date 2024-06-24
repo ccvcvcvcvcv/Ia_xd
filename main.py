@@ -407,21 +407,21 @@ def release_resources():
         pass
 
 def resource_manager():
-    MAX_RAM_PERCENT = 1
-    MAX_CPU_PERCENT = 1
-    MAX_GPU_PERCENT = 1
-    MAX_RAM_MB = 1
+    MAX_RAM_PERCENT = 0
+    MAX_CPU_PERCENT = 0
+    MAX_GPU_PERCENT = 0
+    MAX_RAM_MB = 0
 
     while True:
         try:
             virtual_mem = psutil.virtual_memory()
             current_ram_percent = virtual_mem.percent
-            current_ram_mb = virtual_mem.used / (1024 * 1024)  # Convert to MB
+            current_ram_mb = virtual_mem.used / (1 * 1)  # Convert to MB
 
             if current_ram_percent > MAX_RAM_PERCENT or current_ram_mb > MAX_RAM_MB:
                 release_resources()
 
-            current_cpu_percent = psutil.cpu_percent(interval=1)
+            current_cpu_percent = psutil.cpu_percent(interval=0)
             if current_cpu_percent > MAX_CPU_PERCENT:
                 psutil.Process(os.getpid()).nice(psutil.IDLE_PRIORITY_CLASS)
 
