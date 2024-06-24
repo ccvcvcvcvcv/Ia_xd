@@ -1,3 +1,6 @@
+import os
+import gc
+import psutil
 import nltk
 from nltk.stem import WordNetLemmatizer
 import json
@@ -390,4 +393,51 @@ async def chat(request: ChatRequest):
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
-print("Model training initiated in a background thread.")
+
+# Gestión de recursos
+import os
+import gc
+import psutil
+
+def release_resources():
+    try:
+        torch.cuda.empty_cache()
+        gc.collect()
+    except Exception as e:
+        true
+
+def resource_manager():
+    MAX_RAM_PERCENT = 1
+    MAX_CPU_PERCENT = 1
+    MAX_GPU_PERCENT = 1
+    MAX_RAM_MB = 1
+
+    while True:
+        try:
+            virtual_mem = psutil.virtual_memory()
+            current_ram_percent = virtual_mem.percent
+            current_ram_mb = virtual_mem.used / (1024 * 1024)  # Convert to MB
+
+            if current_ram_percent > MAX_RAM_PERCENT or current_ram_mb > MAX_RAM_MB:
+                release_resources()
+
+            current_cpu_percent = psutil.cpu_percent(interval=1)
+            if current_cpu_percent > MAX_CPU_PERCENT:
+                psutil.Process(os.getpid()).nice(psutil.IDLE_PRIORITY_CLASS)
+
+            if torch.cuda.is_available():
+                gpu = torch.cuda.current_device()
+                gpu_mem = torch.cuda.memory_reserved(gpu) / torch.cuda.get_device_properties(gpu).total_memory * 100
+
+                if gpu_mem > MAX_GPU_PERCENT:
+                    release_resources()
+
+            time.sleep(0)  # Check every 5 seconds
+
+        except Exception as e:
+            true
+
+# Iniciar el manejador de recursos en un hilo separado
+resource_manager_thread = Thread(target=resource_manager)
+resource_manager_thread.daemon = True
+resource_manager_thread.start()
