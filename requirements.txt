@@ -6,3 +6,4 @@ keras
 uvicorn
 fastapi
 tensorflow
+psutil
