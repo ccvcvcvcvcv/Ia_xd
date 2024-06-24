@@ -60,6 +60,7 @@ class ChatbotModel:
         self.classes = sorted(list(set(self.classes)))
 
     def prepare_training_data(self):
+        training_data = []
         output_empty = [0] * len(self.classes)
         for doc in self.documents:
             # Bag of words
@@ -73,11 +74,11 @@ class ChatbotModel:
             output_row = list(output_empty)
             output_row[self.classes.index(doc[1])] = 1
 
-            self.training_data.append([bag, output_row])
+            training_data.append([bag, output_row])
 
-        self.training_data = np.array(self.training_data)
-        self.train_x = list(self.training_data[:, 0])
-        self.train_y = list(self.training_data[:, 1])
+        self.training_data = training_data
+        self.train_x = np.array([i[0] for i in training_data])
+        self.train_y = np.array([i[1] for i in training_data])
 
     def build_model(self):
         self.model = Sequential()
@@ -92,7 +93,7 @@ class ChatbotModel:
 
     def train_model(self, epochs=300, batch_size=5):
         while True:
-            self.model.fit(np.array(self.train_x), np.array(self.train_y), epochs=epochs, batch_size=batch_size, verbose=1)
+            self.model.fit(self.train_x, self.train_y, epochs=epochs, batch_size=batch_size, verbose=1)
             time.sleep(0.1)  # Evita el consumo de recursos al máximo
 
     def predict_class(self, sentence):
