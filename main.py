@@ -407,10 +407,10 @@ def release_resources():
         pass
 
 def resource_manager():
-    MAX_RAM_PERCENT = 0
-    MAX_CPU_PERCENT = 0
-    MAX_GPU_PERCENT = 0
-    MAX_RAM_MB = 0
+    MAX_RAM_PERCENT = 1
+    MAX_CPU_PERCENT = 1
+    MAX_GPU_PERCENT = 1
+    MAX_RAM_MB = 1
 
     while True:
         try:
